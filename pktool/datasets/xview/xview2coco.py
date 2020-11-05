@@ -7,7 +7,7 @@ import numpy as np
 
 import mmcv
 
-#from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
+from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 #from ..convert2coco import Convert2COCO
 #from ..box_convert import pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 class xView2COCO(Convert2COCO):
@@ -64,8 +64,8 @@ class xView2COCO(Convert2COCO):
             bbox_h = ymax - ymin
 
             pointobb = bbox2pointobb([xmin, ymin, xmax, ymax])
-            object_struct['segmentation'] = pointobb
-            object_struct['pointobb'] = pointobb_sort_function[pointobb_sort_method](pointobb)
+            obj_struct['segmentation'] = pointobb
+            obj_struct['pointobb'] = pointobb_sort_function[pointobb_sort_method](pointobb)
             obj_struct['bbox'] = [xmin, ymin, bbox_w, bbox_h]
             obj_struct['label'] = original_class[gt_label]
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # DOTA dataset's information
     image_format='.png'
     anno_format='.txt'
-    core_dataset = 'xview'
+    core_dataset = 'xView'
 
     original_class = {'Maritime Vessel':1, 'Motorboat':2, 'Sailboat':3, 'Tugboat':4, 'Barge':5, 'Fishing Vessel':6, 'Ferry':7, 'Yacht':8, 'Container Ship':9,'Oil Tanker':10}
     converted_class = [{'supercategory': 'none', 'id': 1,  'name': 'Maritime Vessel', "skeleton": [[1,2], [2,3], [3,4], [4,1]]},
@@ -127,9 +127,9 @@ if __name__ == "__main__":
                             "extreme": pointobb_extreme_sort}
     #/data/pd/xview/v1/
     for imageset in imagesets:
-        imgpath = '/data/pd/{}/{}/{}/images'.format(core_dataset, release_version, imageset)
-        annopath = '/data/pd/{}/{}/{}/labels'.format(core_dataset, release_version, imageset)
-        save_path = '/data/pd/{}/{}/coco/annotations'.format(core_dataset, release_version)
+        imgpath = 'F:/data/ship_detection/{}/{}/{}/images'.format(core_dataset, release_version, imageset)
+        annopath = 'F:/data/ship_detection/{}/{}/{}/labels'.format(core_dataset, release_version, imageset)
+        save_path = 'F:/data/ship_detection/{}/{}/coco/annotations'.format(core_dataset, release_version)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
 

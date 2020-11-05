@@ -14,13 +14,13 @@ if __name__ == '__main__':
     gap = 200
 
     for image_set in image_sets:
-        image_path = '/data2/zrx/xView/images'
-        label_path = '/data/pd/xview/shiptxt/'
+        image_path = 'E:/BaiduNetdiskDownload/xView/train_images/train_images'
+        label_path = 'E:/BaiduNetdiskDownload/xView/shiptxt/'
 
-        image_save_path = '/data/pd/xview/origin/images'
+        image_save_path = 'F:/data/ship_detection/xView/origin/images'
         
         mkdir_or_exist(image_save_path)
-        label_save_path = '/data/pd/xview/origin/labels'
+        label_save_path = 'F:/data/ship_detection/xView/origin/label'
         mkdir_or_exist(label_save_path)
 
         # print(os.listdir(label_path))
