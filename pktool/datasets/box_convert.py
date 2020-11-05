@@ -87,3 +87,46 @@ def bbox2pointobb(bbox):
     pointobb = [x1, y1, x2, y2, x3, y3, x4, y4]
     
     return pointobb
+
+
+def pointobb_extreme_sort(pointobb):
+    """
+    Find the "top" point and sort all points as the "top right bottom left" order
+        :param self: self
+        :param points: unsorted points, (N*8) 
+    """   
+    points_np = np.array(pointobb)
+    points_np.resize(4, 2)
+    # sort by Y
+    sorted_index = np.argsort(points_np[:, 1])
+    points_sorted = points_np[sorted_index, :]
+    if points_sorted[0, 1] == points_sorted[1, 1]:
+        if points_sorted[0, 0] < points_sorted[1, 0]:
+            sorted_top_idx = 0
+        else:
+            sorted_top_idx = 1
+    else:
+        sorted_top_idx = 0
+
+    top_idx = sorted_index[sorted_top_idx]
+    pointobb = pointobb[2*top_idx:] + pointobb[:2*top_idx]
+    
+    return pointobb
+
+def pointobb_best_point_sort(pointobb):
+    """
+    Find the "best" point and sort all points as the order that best point is first point
+        :param self: self
+        :param points: unsorted points, (N*8) 
+    """
+    xmin, ymin, xmax, ymax = pointobb2bbox(pointobb)
+    w = xmax - xmin
+    h = ymax - ymin
+    reference_bbox = [xmin, ymin, xmax, ymin, xmax, ymax, xmin, ymax]
+    reference_bbox = np.array(reference_bbox)
+    normalize = np.array([1.0, 1.0] * 4)
+    combinate = [np.roll(pointobb, 0), np.roll(pointobb, 2), np.roll(pointobb, 4), np.roll(pointobb, 6)]
+    distances = np.array([np.sum(((coord - reference_bbox) / normalize)**2) for coord in combinate])
+    sorted = distances.argsort()
+
+    return combinate[sorted[0]].tolist()

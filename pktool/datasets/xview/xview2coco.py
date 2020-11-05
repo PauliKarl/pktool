@@ -6,7 +6,7 @@ import json
 import numpy as np
 
 import mmcv
-from pktool import Convert2COCO
+from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 
 class xView2COCO(Convert2COCO):
     def __generate_coco_annotation__(self, annotpath, imgpath):
@@ -45,30 +45,30 @@ class xView2COCO(Convert2COCO):
     def __simpletxt_parse__(self, label_file):
 
         objects = []
-        if self.groundtruth:
-            lines = open(label_file, 'r').readlines()
-            for line in lines:
-               
-                obj_struct = {}
-                xyxy2 = [float(xy) for xy in line.rstrip().split(' ')[:4]]
-                
-                gt_label = " ".join(line.rstrip().split(' ')[4:])
 
-                xmin = min(xyxy2[0::2])
-                ymin = min(xyxy2[1::2])
-                xmax = max(xyxy2[0::2])
-                ymax = max(xyxy2[1::2])
-                bbox_w = xmax - xmin
-                bbox_h = ymax - ymin
-                obj_struct['bbox'] = [xmin, ymin, bbox_w, bbox_h]
-                obj_struct['label'] = original_class[gt_label]
-
-                objects.append(obj_struct)
-        else:
+        lines = open(label_file, 'r').readlines()
+        for line in lines:
+            
             obj_struct = {}
-            obj_struct['bbox'] = [0, 0, 0, 0]
-            obj_struct['label'] = 0
+            xyxy2 = [float(xy) for xy in line.rstrip().split(' ')[:4]]
+            
+            gt_label = " ".join(line.rstrip().split(' ')[4:])
+
+            xmin = min(xyxy2[0::2])
+            ymin = min(xyxy2[1::2])
+            xmax = max(xyxy2[0::2])
+            ymax = max(xyxy2[1::2])
+            bbox_w = xmax - xmin
+            bbox_h = ymax - ymin
+
+            pointobb = bbox2pointobb([xmin, ymin, xmax, ymax])
+            object_struct['segmentation'] = pointobb
+            object_struct['pointobb'] = pointobb_sort_function[pointobb_sort_method](pointobb)
+            obj_struct['bbox'] = [xmin, ymin, bbox_w, bbox_h]
+            obj_struct['label'] = original_class[gt_label]
+
             objects.append(obj_struct)
+
         return objects
 
 def parse_args():
@@ -119,6 +119,10 @@ if __name__ == "__main__":
     ]
     imagesets = ['trainval','test']
     release_version = 'v1'
+
+    pointobb_sort_method = 'best' # or "extreme"
+    pointobb_sort_function = {"best": pointobb_best_point_sort,
+                            "extreme": pointobb_extreme_sort}
     #/data/pd/xview/v1/
     for imageset in imagesets:
         imgpath = '/data/pd/{}/{}/{}/images'.format(core_dataset, release_version, imageset)
