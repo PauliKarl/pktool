@@ -1,5 +1,4 @@
 import argparse
-
 import os
 import cv2
 import json
@@ -7,7 +6,7 @@ import numpy as np
 
 import mmcv
 
-#from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
+from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 #from ..convert2coco import Convert2COCO
 #from ..box_convert import pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 class xView2COCO(Convert2COCO):
@@ -48,7 +47,9 @@ class xView2COCO(Convert2COCO):
 
         objects = []
 
-        lines = open(label_file, 'r').readlines()
+        with open(label_file, 'r') as f:
+            lines = f.readlines()
+        #lines = open(label_file, 'r').readlines()
         for line in lines:
             
             obj_struct = {}
@@ -64,8 +65,8 @@ class xView2COCO(Convert2COCO):
             bbox_h = ymax - ymin
 
             pointobb = bbox2pointobb([xmin, ymin, xmax, ymax])
-            object_struct['segmentation'] = pointobb
-            object_struct['pointobb'] = pointobb_sort_function[pointobb_sort_method](pointobb)
+            obj_struct['segmentation'] = pointobb
+            obj_struct['pointobb'] = pointobb_sort_function[pointobb_sort_method](pointobb)
             obj_struct['bbox'] = [xmin, ymin, bbox_w, bbox_h]
             obj_struct['label'] = original_class[gt_label]
 
