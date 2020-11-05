@@ -1,6 +1,6 @@
 from setuptools import setup,find_packages
 
-setup(name='Atool',
+setup(name='pktool',
       version='0.1',
       description='paulikarl tools',
       classifiers=[
