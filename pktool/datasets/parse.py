@@ -1,11 +1,20 @@
 import xml.etree.ElementTree as ET
 from tqdm import tqdm
+<<<<<<< HEAD
 from collections import defaultdict
+=======
+
+>>>>>>> 24b10d3d8ef6ebd70558b6e84482bf05b1191ca7
 import numpy as np
 import json
 import csv
 import re
+<<<<<<< HEAD
 import os
+=======
+from collections import defaultdict
+#import csv
+>>>>>>> 24b10d3d8ef6ebd70558b6e84482bf05b1191ca7
 def voc_parse(label_file):
     """parse VOC style dataset label file
     

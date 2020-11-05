@@ -1,5 +1,4 @@
 import argparse
-
 import os
 import cv2
 import json
@@ -48,7 +47,9 @@ class xView2COCO(Convert2COCO):
 
         objects = []
 
-        lines = open(label_file, 'r').readlines()
+        with open(label_file, 'r') as f:
+            lines = f.readlines()
+        #lines = open(label_file, 'r').readlines()
         for line in lines:
             
             obj_struct = {}
