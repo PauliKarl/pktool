@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import tqdm
 import numpy as np
 import json
-import csv
+#import csv
 def voc_parse(label_file):
     """parse VOC style dataset label file
     
