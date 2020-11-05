@@ -6,8 +6,10 @@ import json
 import numpy as np
 
 import mmcv
-from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 
+#from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
+#from ..convert2coco import Convert2COCO
+#from ..box_convert import pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 class xView2COCO(Convert2COCO):
     def __generate_coco_annotation__(self, annotpath, imgpath):
         """
@@ -84,7 +86,7 @@ def parse_args():
     return args
 
 if __name__ == "__main__":
-    args = parse_args()
+    #args = parse_args()
 
     # basic dataset information
     info = {"year" : 2020,

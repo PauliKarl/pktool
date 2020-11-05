@@ -1,7 +1,7 @@
 import os
 import shutil
 import numpy as np
-from pktool import mkdir_or_exist
+import pktool
 
 def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.8, image_format='.png', label_format='.txt', seed=0):
     """Generate trainval and test sets from origin set by copying files randomly.
@@ -20,14 +20,14 @@ def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.
     src_image_path = os.path.join(origin_dataset_dir, 'images')
 
     trainval_dst_label_path = os.path.join(trainval_dir, 'labels')
-    mkdir_or_exist(trainval_dst_label_path)
+    pktool.mkdir_or_exist(trainval_dst_label_path)
     trainval_dst_image_path = os.path.join(trainval_dir, 'images')
-    mkdir_or_exist(trainval_dst_image_path)
+    pktool.mkdir_or_exist(trainval_dst_image_path)
 
     test_dst_label_path = os.path.join(test_dir, 'labels')
-    mkdir_or_exist(test_dst_label_path)
+    pktool.mkdir_or_exist(test_dst_label_path)
     test_dst_image_path = os.path.join(test_dir, 'images')
-    mkdir_or_exist(test_dst_image_path)
+    pktool.mkdir_or_exist(test_dst_image_path)
 
     file_names = [label_file.split('.txt')[0] for label_file in os.listdir(src_label_path)]
     file_names = sorted(file_names)
