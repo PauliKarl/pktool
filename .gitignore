@@ -3,3 +3,4 @@ develop-eggs/
 dist/
 *.egg-info/
 __pycache__/
+.vscode/
