@@ -7,7 +7,7 @@ from setuptools import find_packages, setup, Extension
 
 
 from Cython.Build import cythonize
-from torch.utils.cpp_extension import BuildExtension, CUDAExtension
+#from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
 def get_git_hash():
 

@@ -2,7 +2,7 @@ import os
 from pktool import XVIEW_PARSE
 
 if __name__ == '__main__':
-    # get ship object in xView datasets    
+    #get ship object in xView datasets    
     Maritime_label = {'Maritime Vessel', 'Motorboat', 'Sailboat', 'Tugboat', 'Barge', 'Fishing Vessel', 'Ferry', 'Yacht', 'Container Ship','Oil Tanker'}
     num_obj = {'Maritime Vessel':0, 'Motorboat':0, 'Sailboat':0, 'Tugboat':0, 'Barge':0, 'Fishing Vessel':0, 'Ferry':0, 'Yacht':0, 'Container Ship':0,'Oil Tanker':0}
     data_parser = XVIEW_PARSE("E:/BaiduNetdiskDownload/xView/train_labels/xView_train.geojson","F:/my_code/pktool/pktool/datasets/xview/xview_class_labels.txt")

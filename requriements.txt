@@ -1,3 +1,2 @@
-torch1.1
 cv2
 numpy

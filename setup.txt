@@ -2,4 +2,4 @@ python setup.py check
 
 python setup.py sdist
 
-pip install e .
+pip install -e .

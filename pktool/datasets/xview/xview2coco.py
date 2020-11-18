@@ -5,10 +5,8 @@ import json
 import numpy as np
 
 import mmcv
-
+from pycocotools import mask as maskUtils
 from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
-#from ..convert2coco import Convert2COCO
-#from ..box_convert import pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 class xView2COCO(Convert2COCO):
     def __generate_coco_annotation__(self, annotpath, imgpath):
         """
@@ -22,6 +20,7 @@ class xView2COCO(Convert2COCO):
         coco_annotations = []
         
         for object_struct in objects:
+            coco_annotation={}
             bbox = object_struct['bbox']
             label = object_struct['label']
 
@@ -33,10 +32,11 @@ class xView2COCO(Convert2COCO):
                 self.small_object_idx += 1
                 continue
 
-            coco_annotation = {}
+            coco_annotation['segmentation']=[object_struct['segmentation']]
             coco_annotation['bbox'] = bbox
             coco_annotation['category_id'] = label
             coco_annotation['area'] = np.float(area)
+            coco_annotation['iscrowd'] = 0
             coco_annotation['num_keypoints'] = 4
 
             coco_annotations.append(coco_annotation)
