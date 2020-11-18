@@ -31,18 +31,3 @@ if __name__ == '__main__':
             if no_ship_flag:
                 os.remove(f_path)
     print(num_obj)
-    '''
-    data_parser = XVIEW_PARSE("/home/pt/data/xView/xView_train.geojson","/home/pt/project/wwtool/tools/datasets/xview/xview_class_labels.txt")
-    img_list = set(data_parser.image_names)
-    label_list = set()
-
-    for img in img_list:
-        if img == "None":
-            continue
-        obj = data_parser.xview_parse(img)
-        if len(obj):
-            for instance in obj:
-                label_list.add(instance["label"])
-
-    print(label_list)
-'''

@@ -1,6 +1,14 @@
 import os
 import six
+import glob
 
+def get_files(path, _ends=['*.json']):
+    all_files = []
+    for _end in _ends:
+        files = glob.glob(os.path.join(path, _end))
+        all_files.extend(files)
+    file_num = len(all_files)
+    return all_files, file_num
 
 def mkdir_or_exist(dir_name, mode=0o777):
     if dir_name == '':
