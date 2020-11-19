@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-
+import math
 def xyxy2cxcywh(bbox):
     """convert box format [xmin, ymin, xmax, ymax] to [cx, cy, w, h]
 
@@ -130,3 +130,30 @@ def pointobb_best_point_sort(pointobb):
     sorted = distances.argsort()
 
     return combinate[sorted[0]].tolist()
+
+
+def rotate_pointobb(pointobb, theta, anchor=None):
+    """rotate pointobb around anchor
+    
+    Arguments:
+        pointobb {list or numpy.ndarray, [1x8]} -- vertices of obb region
+        theta {int, rad} -- angle in radian measure
+    
+    Keyword Arguments:
+        anchor {list or tuple} -- fixed position during rotation (default: {None}, use left-top vertice as the anchor)
+    
+    Returns:
+        numpy.ndarray, [1x8] -- rotated pointobb
+    """
+    if type(pointobb) == list:
+        pointobb = np.array(pointobb)
+    if type(anchor) == list:
+        anchor = np.array(anchor).reshape(2, 1)
+    v = pointobb.reshape((4, 2)).T
+    if anchor is None:
+        anchor = v[:,:1]
+
+    rotate_mat = np.array([[math.cos(theta), -math.sin(theta)], [math.sin(theta), math.cos(theta)]])
+    res = np.dot(rotate_mat, v - anchor)
+    
+    return (res + anchor).T.reshape(-1)

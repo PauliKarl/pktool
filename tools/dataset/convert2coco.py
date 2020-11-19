@@ -92,11 +92,11 @@ if __name__ == "__main__":
 
     # basic dataset information
     info = {"year" : 2020,
-                "version" : "1.5",
-                "description" : "xView-COCO",
-                "contributor" : "paulikarl",
-                "url" : "paulikarl.cn",
-                "date_created" : "2020"
+            "version" : "1.5",
+            "description" : "xView-COCO",
+            "contributor" : "paulikarl",
+            "url" : "paulikarl.cn",
+            "date_created" : "2020"
             }
     
     licenses = [{"id": 1,
@@ -157,7 +157,7 @@ if __name__ == "__main__":
         {'supercategory': 'none', 'id': 34,  'name': '船-海洋观测舰--二见级-日南号'}
     ]
     imagesets = ['trainval']
-    release_version = 'v1'
+    release_version = 'v2'
 
     pointobb_sort_method = 'best' # or "extreme"
     pointobb_sort_function = {"best": pointobb_best_point_sort,

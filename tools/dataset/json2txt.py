@@ -9,7 +9,7 @@ from pktool import get_files
 
 
 def get_annotation_from_json(file_path):
-    """ convert annotation format(from rslabel)
+    """ convert annotation format(from rslabel tool)
 
     Args:
         file_path: label file

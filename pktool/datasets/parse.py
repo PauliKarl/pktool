@@ -92,15 +92,23 @@ def visdrone_parse(label_file):
 
     return objects
 
-def simpletxt_parse(label_file):
+def simpletxt_parse(label_file, space=' ', boxType='bbox'):
     """parse simpletxt style dataset label file
     
     Arguments:
         label_file {str} -- label file path
+        space=' ' or ','
+        boxType='bbox' or 'points' or 'thetaobb'
+            bbox: [xmin, ymin, xmax, ymax]
+            points: [x1,y1,x2,y2,x3,y3,x4,y4]
+            thetaobb: [cx, cy, w, h, theta]
     
     Returns:
         dict, {'bbox': [...], 'label': class_name} -- objects' location and class
     """
+    BOX_TYPE = {'bbox':4, 'points':8, 'theta':5}
+    location = BOX_TYPE[boxType]
+
     with open(label_file, 'r') as f:
         lines = f.readlines()
     
@@ -108,10 +116,10 @@ def simpletxt_parse(label_file):
     basic_label_str = " "
     for line in lines:
         object_struct = dict()
-        line = line.rstrip().split(' ')
-        label = basic_label_str.join(line[4:])
-        bbox = [float(_) for _ in line[0:4]]
-        object_struct['bbox'] = bbox
+        line = line.rstrip().split(space)
+        label = basic_label_str.join(line[location:])
+        bbox = [float(_) for _ in line[0:location]]
+        object_struct[boxType] = bbox
         object_struct['label'] = label
         objects.append(object_struct)
     

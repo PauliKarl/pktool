@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 from PIL import Image
 from skimage.io import imread
-from pktool import split_image, mkdir_or_exist, simpletxt_dump, visdrone_parse, pointobb2thetaobb,thetaobb2pointobb
+from pktool import split_image, mkdir_or_exist, simpletxt_dump, visdrone_parse, pointobb2thetaobb,thetaobb2pointobb, simpletxt_parse
 from pktool import get_files
 import gdal
 
@@ -87,33 +87,6 @@ def read_gaofen(img_file, convert=None):
         img_bgr = None
     return img_rgb, img_bgr
 
-def txt_parse(label_file):
-    """parse visdrone style dataset label file
-
-    Arguments:
-        label_file {str} -- label file path
-        (<bbox_left>, <bbox_top>, <bbox_width>, <bbox_height>, <score>, <object_category>, <truncation>, <occlusion>)
-
-    Returns:
-        dict, {'bbox': [xmin, ymin, xmax, ymax], 'label': class_name} -- objects' location and class
-    """
-    with open(label_file, 'r') as f:
-        lines = f.readlines()
-
-    objects = []
-    for line in lines:
-        object_struct = dict()
-        line = line.rstrip().split(',')
-        label = line[8]
-        points = [float(_) for _ in line[0:8]]
-        object_struct['points'] = points
-        object_struct['label'] = label
-        if object_struct['label'] == '0' or object_struct['label'] == '11':
-            continue
-        objects.append(object_struct)
-
-    return objects
-
 Image.MAX_IMAGE_PIXELS = int(2048 * 2048 * 2048 // 4 // 3)
 
 if __name__ == '__main__':
@@ -138,7 +111,7 @@ if __name__ == '__main__':
 
         img,_ = read_gaofen(image_file)
 
-        objects = txt_parse(label_file)
+        objects = simpletxt_parse(label_file,space=',',boxType='points')
         bboxes = np.array([pointobb2thetaobb(obj['points']) for obj in objects])
 
         labels = np.array([obj['label'] for obj in objects])

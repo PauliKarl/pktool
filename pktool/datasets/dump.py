@@ -1,6 +1,6 @@
 
 
-def simpletxt_dump(objects, anno_file, encode='bbox'):
+def simpletxt_dump(objects, anno_file, space=' ', encode='bbox'):
     """dump object information to simple txt label files
     
     Arguments:
@@ -17,5 +17,6 @@ def simpletxt_dump(objects, anno_file, encode='bbox'):
             bbox = [round(_, 3) for _ in map(float, bbox)]
             bbox = ["{:.4f}".format(_) for _ in bbox]
             content = " ".join(map(str, bbox))
-            content = content + ' ' + label + '\n'
+            content = content + space + label + '\n'
             f.write(content)
+    return 

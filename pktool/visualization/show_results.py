@@ -94,7 +94,7 @@ def imshow_bboxes(img_or_path,
             win_name = "results"
         cv2.imshow(win_name, img)
         cv2.waitKey(wait_time)
-        #cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
     if out_file is not None:
         dir_name = os.path.abspath(os.path.dirname(out_file))
         mkdir_or_exist(dir_name)
@@ -199,7 +199,7 @@ def imshow_rbboxes(img_or_path,
         cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
         cv2.imshow(win_name, img)
         cv2.waitKey(wait_time)
-        #cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
     if out_file is not None:
         dir_name = os.path.abspath(os.path.dirname(out_file))
         mkdir_or_exist(dir_name)

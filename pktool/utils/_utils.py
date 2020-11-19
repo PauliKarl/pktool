@@ -3,6 +3,14 @@ import six
 import glob
 
 def get_files(path, _ends=['*.json']):
+    """find all file endwith _ends[list]
+    Args:
+        path: root dir
+        _ends: list, all formats you need
+    Return:
+        all_files: file list, full path
+        file_num: count
+    """
     all_files = []
     for _end in _ends:
         files = glob.glob(os.path.join(path, _end))
