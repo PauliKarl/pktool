@@ -88,6 +88,32 @@ def bbox2pointobb(bbox):
     
     return pointobb
 
+def mask2rbbox(mask, dilate=False):
+    mask = (mask > 0.5).astype(np.uint8)
+    gray = np.array(mask*255, dtype=np.uint8)
+
+    if dilate:
+        h, w = gray.shape[0], gray.shape[1]
+        size = np.sum(gray / 255)
+        niter = int(math.sqrt(size * min(w, h) / (w * h)) * 2)
+        print(niter)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1 + niter, 1 + niter))
+        gray = cv2.dilate(gray, kernel)
+    contours, hierarchy = cv2.findContours(gray.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    if contours != []:
+        imax_cnt_area = -1
+        imax = -1
+        cnt = max(contours, key = cv2.contourArea)
+        rect = cv2.minAreaRect(cnt)
+        x, y, w, h, theta = rect[0][0], rect[0][1], rect[1][0], rect[1][1], rect[2]
+        theta = theta * np.pi / 180.0
+        thetaobb = [x, y, w, h, theta]
+        pointobb = thetaobb2pointobb([x, y, w, h, theta])
+    else:
+        thetaobb = [0, 0, 0, 0, 0]
+        pointobb = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    return thetaobb, pointobb
 
 def pointobb_extreme_sort(pointobb):
     """
