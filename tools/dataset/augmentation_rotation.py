@@ -62,7 +62,7 @@ def rotation(img,
     img_origin = img.copy()
     #imshow_rbboxes(img, thetaobbs, win_name='origin')
 
-    rotation_angle = 45
+    rotation_angle = rotation_angle
     rotation_anchor = [img.shape[0]//2, img.shape[1]//2]
     
     rotated_img = imrotate(img_origin, rotation_angle)
