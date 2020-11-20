@@ -6,9 +6,9 @@ import os
 from pktool import  pointobb2thetaobb, imshow_rbboxes
 
 if __name__=='__main__':
-    root = 'F:\data\gei_wd'
-    img_path = 'F:\data\gei_wd\images'
-    label_path = 'F:\data\gei_wd\labels'
+    root = '/home/pd/data'
+    img_path = '/home/pd/data/images'
+    label_path = '/home/pd/data/labels'
 
     for label_file in os.listdir(label_path):
         img_file = img_path + "/" + label_file.split('.txt')[0] + '.png'
