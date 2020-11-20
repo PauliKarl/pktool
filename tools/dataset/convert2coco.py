@@ -164,10 +164,10 @@ if __name__ == "__main__":
                             "extreme": pointobb_extreme_sort}
     #/data/pd/xview/v1/
     for imageset in imagesets:
-        imgpath = 'F:/data/gei_wd/images'
-        annopath = 'F:/data/gei_wd/labels'
+        imgpath = '/home/pd/data/images'
+        annopath = '/home/pd/data/labels'
 
-        save_path = 'F:/data/gei_wd/{}/{}/coco/annotations'.format(core_dataset, release_version)
+        save_path = '/home/pd/data/{}/{}/coco/annotations'.format(core_dataset, release_version)
         if not os.path.exists(save_path):
             os.makedirs(save_path)
 

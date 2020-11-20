@@ -144,8 +144,8 @@ def rotation_main(image_path, label_path, label_list, rotation_angle=45):
 
 
 if __name__== '__main__':
-    image_path='F:\data\gei_wd\images'
-    label_path='F:\data\gei_wd\labels'
+    image_path='/home/pd/data/images/'
+    label_path='/home/pd/data/labels/'
 
     label_list=os.listdir(label_path)
 
