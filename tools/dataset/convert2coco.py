@@ -157,7 +157,7 @@ if __name__ == "__main__":
         {'supercategory': 'none', 'id': 34,  'name': '船-海洋观测舰--二见级-日南号'}
     ]
     imagesets = ['trainval']
-    release_version = 'v2'
+    release_version = 'v0'
 
     pointobb_sort_method = 'best' # or "extreme"
     pointobb_sort_function = {"best": pointobb_best_point_sort,

@@ -149,8 +149,8 @@ if __name__== '__main__':
 
     label_list=os.listdir(label_path)
 
-    rotation_main(image_path, label_path, label_list, rotation_angle=30)
-    rotation_main(image_path, label_path, label_list, rotation_angle=60)
-    rotation_main(image_path, label_path, label_list, rotation_angle=90)
-    rotation_main(image_path, label_path, label_list, rotation_angle=120)
-    rotation_main(image_path, label_path, label_list, rotation_angle=150)
+    rotation_main(image_path, label_path, label_list, rotation_angle=5)
+    #rotation_main(image_path, label_path, label_list, rotation_angle=60)
+    #rotation_main(image_path, label_path, label_list, rotation_angle=90)
+    #rotation_main(image_path, label_path, label_list, rotation_angle=120)
+    #rotation_main(image_path, label_path, label_list, rotation_angle=150)
