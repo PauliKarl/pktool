@@ -85,7 +85,8 @@ class Convert2COCO():
                     annotations.append(annotation)
 
                 imId += 1
-            # used to be // 50 
+            
+            # set the interval of info print
             if imId % (len(self.imlist) // 50) == 0:
                 print("\nImage ID: {}, Instance ID: {}, Small Object Counter: {}, Max Object Number: {}".format(imId, index, self.small_object_idx, self.max_object_num_per_image))
             
