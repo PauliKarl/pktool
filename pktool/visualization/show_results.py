@@ -29,6 +29,8 @@ def imshow_bboxes(img_or_path,
         bboxes (list or ndarray): A ndarray of shape (N, 4)
         labels (list or ndarray): A ndarray of shape (N, 1)
         scores (list or ndarray): A ndarray of shape (N, 1)
+        ...
+        selectDir (str): path to save the selected image by keyb 'y' and other keys to discard.(just copy file)
     """
     if is_str(img_or_path):
         img = cv2.imread(img_or_path)
