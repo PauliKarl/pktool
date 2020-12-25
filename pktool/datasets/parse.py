@@ -1,5 +1,6 @@
-import xml.etree.ElementTree as ET
+from xml.etree import ElementTree as ET
 from tqdm import tqdm
+
 from collections import defaultdict
 
 import numpy as np
@@ -9,6 +10,8 @@ import re
 import os
 from collections import defaultdict
 #import csv
+
+
 def voc_parse(label_file):
     """parse VOC style dataset label file
     
