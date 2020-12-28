@@ -27,3 +27,6 @@ def mkdir_or_exist(dir_name, mode=0o777):
     else:
         if not os.path.isdir(dir_name):
             os.makedirs(dir_name, mode=mode)
+
+def get_key(d, v):
+    return [key for key, val in d.items() if val==v][0]

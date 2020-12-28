@@ -1,7 +1,7 @@
 
 
 def simpletxt_dump(objects, anno_file, space=' ', encode='bbox'):
-    """dump object information to simple txt label files
+    """dump object information to simple txt label files  and use 'utf-8' 
     
     Arguments:
         objects {dict} -- object information
@@ -10,7 +10,7 @@ def simpletxt_dump(objects, anno_file, space=' ', encode='bbox'):
     Returns:
         None
     """
-    with open(anno_file, 'w') as f:
+    with open(anno_file, 'w', encoding='utf-8') as f:
         for obj in objects:
             bbox = obj[encode]
             label = obj['label']

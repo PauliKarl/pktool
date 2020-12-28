@@ -171,8 +171,6 @@ def imshow_rbboxes(img_or_path,
         scores_vis = np.array(scores)
         if scores_vis.ndim == 0:
             scores_vis = np.array([scores_vis])
-    if cls_map is None:
-        cls_map={"ship":1}
     if labels is None:
         colors = dict()
         colors[colors] = color_val(colors)

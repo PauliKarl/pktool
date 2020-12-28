@@ -6,7 +6,7 @@ from xml.etree.ElementTree import Element, SubElement
 
 try:
   from lxml import etree
-  print("running with lxml.etree")
+  #print("running with lxml.etree")
 except ImportError:
   try:
     # Python 2.5
@@ -223,6 +223,13 @@ class PascalVocReader:
         self.parseXML()
 
     def getShapes(self):
+        """return list[[label, points, direction, isRotated, difficult]]
+            label = object name
+            points: list[tuple(x,y)x4]
+            direction: angle or 0
+            isRotated: True for OBB reps and False for hbb
+            difficult : bool
+        """
         return self.shapes
 
     def addShape(self, label, bndbox, difficult):
