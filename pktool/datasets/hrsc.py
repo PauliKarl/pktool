@@ -73,11 +73,11 @@ class HRSCReaderCls:
         for HRSC_Object in HRSC_Objects.findall('HRSC_Object'):
             class_id = int(HRSC_Object.find('Class_ID').text)
 
-            mbox_cx = float(robndbox.find('mbox_cx').text)
-            mbox_cy = float(robndbox.find('mbox_cy').text)
-            mbox_w = float(robndbox.find('mbox_w').text)
-            mbox_h = float(robndbox.find('mbox_h').text)
-            mbox_ang = float(robndbox.find('mbox_ang').text)
+            mbox_cx = float(HRSC_Object.find('mbox_cx').text)
+            mbox_cy = float(HRSC_Object.find('mbox_cy').text)
+            mbox_w = float(HRSC_Object.find('mbox_w').text)
+            mbox_h = float(HRSC_Object.find('mbox_h').text)
+            mbox_ang = float(HRSC_Object.find('mbox_ang').text)
 
             robndbox = [mbox_cx, mbox_cy, mbox_w, mbox_h, mbox_ang]
 
