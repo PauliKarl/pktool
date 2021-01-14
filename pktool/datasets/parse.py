@@ -109,7 +109,7 @@ def simpletxt_parse(label_file, space=' ', boxType='bbox'):
     Returns:
         dict, {'bbox': [...], 'label': class_name} -- objects' location and class
     """
-    BOX_TYPE = {'bbox':4, 'points':8, 'theta':5}
+    BOX_TYPE = {'bbox':4, 'points':8, 'thetaobb':5}
     location = BOX_TYPE[boxType]
 
     with open(label_file, 'r') as f:

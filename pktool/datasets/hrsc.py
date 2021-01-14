@@ -62,6 +62,9 @@ class HRSCReaderCls:
                             self.clsDict[class_id] = class_name
 
     def parseXML(self, xmlFile):
+        """return rbbox from annotation file(*.xml)
+        rbbox shapes: [cx,cy,w,h,theta]
+        """
         assert xmlFile.endswith(XML_EXT), "Unsupport file format"
 
         shapes = []

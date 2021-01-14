@@ -1,8 +1,8 @@
 from pktool import HRSCReaderCls, get_files, simpletxt_dump, mkdir_or_exist
 import os
 
-xmlFolder = '/data/hrsc2016/release/v0/test/annotations/'
-saveTxt = '/data/pd/hrsc2016/v0/test/annotations/'
+xmlFolder = '/data/hrsc2016/release/v0/trainval/annotations/'
+saveTxt = '/data/pd/hrsc2016/v0/trainval/annotations/'
 mkdir_or_exist(saveTxt)
 
 clsPath='/home/pd/code/pktool/tools/dataset/hrsc/sysdata.xml'
