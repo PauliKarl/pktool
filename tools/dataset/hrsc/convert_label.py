@@ -31,5 +31,3 @@ for xmlfile in xmlList:
 
     simpletxt_dump(objects, label_save_file, encode='rbbox')
     print(label_save_file)
-
-
