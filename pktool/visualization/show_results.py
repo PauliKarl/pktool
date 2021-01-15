@@ -4,6 +4,21 @@ import os
 import shutil
 from pktool import thetaobb2pointobb, mkdir_or_exist
 from .color import is_str, color_val
+from PIL import Image, ImageDraw, ImageFont
+
+ 
+def cv2ImgAddText(img, text, left, top, textColor=(0, 255, 0), textSize=20):
+    if (isinstance(img, np.ndarray)):  # 判断是否OpenCV图片类型
+        img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    # 创建一个可以在给定图像上绘图的对象
+    draw = ImageDraw.Draw(img)
+    # 字体的格式
+    fontStyle = ImageFont.truetype("font/simsun.ttc", textSize, encoding="utf-8")
+    # 绘制文本
+    draw.text((left, top), text, textColor, font=fontStyle)
+    # 转换回OpenCV格式
+    return cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+
 
 def imshow_bboxes(img_or_path,
                   bboxes,
@@ -198,6 +213,7 @@ def imshow_rbboxes(img_or_path,
             cv2.line(img, (int(rbbox[idx*2]), int(rbbox[idx*2+1])), (int(rbbox[(idx+1)*2]), int(rbbox[(idx+1)*2+1])), current_color, thickness=thickness)
 
         if show_label:
+            #cv2ImgAddText(img, label_str, left=cx, top=cy-5,textColor=current_color, textSize=10)
             cv2.putText(img, label_str, (cx, cy-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, fontScale = 0.6, color = current_color, thickness = 2, lineType = 8)
         if show_score:
             cv2.putText(img, label_str + "{:.2f}".format(score), (cx, cy), cv2.FONT_HERSHEY_COMPLEX_SMALL, fontScale = 1.0, color = current_color, thickness = 1, lineType = 8)

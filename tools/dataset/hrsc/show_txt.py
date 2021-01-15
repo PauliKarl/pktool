@@ -30,4 +30,5 @@ if __name__=='__main__':
                 cls_id+=1
             else:
                 labels.append(tmp_classname[gt_label])
+        print(tmp_classname)
         imshow_rbboxes(img_file,rbboxes,labels=labels, show_label=True)
