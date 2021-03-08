@@ -27,16 +27,16 @@ import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf", size=14) 
 
-plt.bar(1, 305, label='Maritime Vessel')
-plt.bar(2, 1403, label='Motorboat')
-plt.bar(3, 540, label='Sailboat')
-plt.bar(4, 104, label='Tugboat')
-plt.bar(5, 624, label='Barge')
-plt.bar(6, 624, label='Fishing Vessel')
-plt.bar(7, 624, label='Ferry')
-plt.bar(8, 624, label='Yacht')
-plt.bar(9, 624, label='Container Ship')
-plt.bar(10, 624, label='Oil Tanker')
+#plt.bar(1, 305, label='Maritime Vessel')#船舶大类
+plt.bar(1, 2835, label='Motorboat')
+plt.bar(2, 1109, label='Sailboat')
+plt.bar(3, 462, label='Tugboat')
+plt.bar(4, 355, label='Barge')
+plt.bar(5, 1751, label='Fishing Vessel')
+plt.bar(6, 400, label='Ferry')
+plt.bar(7, 917, label='Yacht')
+plt.bar(8, 618, label='Container Ship')
+plt.bar(9, 162, label='Oil Tanker')
 # params
 ##{'Maritime Vessel', 'Motorboat', 'Sailboat', 'Tugboat', 'Barge', 'Fishing Vessel', 'Ferry', 'Yacht', 'Container Ship','Oil Tanker'}
 # x: 条形图x轴
