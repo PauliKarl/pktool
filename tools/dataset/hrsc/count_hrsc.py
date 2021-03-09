@@ -4,7 +4,7 @@ import os
 
 clsPath='/home/pd/code/pktool/tools/dataset/hrsc/sysdata.xml'
 
-clsReader = HRSCReaderCls(clsPath=clsPath, layer=2)
+clsReader = HRSCReaderCls(clsPath=clsPath, layer=1)
 
 clsDict = clsReader.getclsDict()
 

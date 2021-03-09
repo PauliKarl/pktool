@@ -76,8 +76,11 @@ def data_analysze_xml(origin_label_path):
             dataset_info['instances'] = {'total':0, 'small':0, 'large':0, 'ratios':[]}
             dataset_info['image_sizes'] = image_sizes
     """
-    datasets = ['Airbus','DIOR','DOTA','HRSC','LEVIR','MASATI','RS','xView']
-    #datasets = ['RS']
+    #datasets = ['Airbus','DIOR','DOTA','HRSC','LEVIR','MASATI','RS','xView','NWPU']
+    
+    
+    datasets = ['Airbus']
+
     infos = []
     for dataset in datasets:
         
@@ -149,6 +152,7 @@ def data_analysze_xml(origin_label_path):
 
 if __name__ == '__main__':
 
+    '''
     jsonFile = '/data2/ghw/ship/coco/annotations/instances_val2017.json'
     coco_analysze(jsonFile)
     '''
@@ -172,9 +176,9 @@ if __name__ == '__main__':
         
         print('small in {}:'.format(info['type']),info['instances']['small'])
         print('large in {}:'.format(info['type']),info['instances']['large'])
+        # print('imageSize in {}: is '.format(info['type']), info['image_sizes'])
     print("total_images:",total_images)
     print("total_instances:",total_instances)
-    print("small:",small)
-    print("large:",big)
+    print("small:",small/total_instances)
+    print("large:",big/total_instances)
     print("ratios:",ratios)
-    '''
