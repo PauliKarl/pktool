@@ -10,7 +10,7 @@ import re
 import os
 from collections import defaultdict
 #import csv
-
+import pktool #import pointobb2bbox
 
 def voc_parse(label_file):
     """parse VOC style dataset label file
@@ -128,6 +128,30 @@ def simpletxt_parse(label_file, space=' ', boxType='bbox'):
     
     return objects
 
+def dota_parse(label_file):
+    """parse dota style dataset label file
+    
+    Arguments:
+        label_file {str} -- label file path
+    
+    Returns:
+        dict, {'bbox': [...], 'label': class_name} -- objects' location and class
+    """
+    with open(label_file, 'r') as f:
+        lines = f.readlines()[2:]
+    
+    objects = []
+    for line in lines:
+        object_struct = dict()
+        line = line.rstrip().split(' ')
+        label = line[8]
+        pointobb = [float(xy) for xy in line[:8]]
+        bbox = pktool.pointobb2bbox(pointobb)
+        object_struct['bbox'] = bbox
+        object_struct['label'] = label
+        object_struct['pointobb'] = pointobb
+        objects.append(object_struct)
+    return objects
 
 class XVIEW_PARSE():
     def __init__(self, json_file, xview_class_labels_file):

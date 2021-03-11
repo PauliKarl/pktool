@@ -6,7 +6,8 @@ def simpletxt_dump(objects, anno_file, space=' ', encode='bbox'):
     Arguments:
         objects {dict} -- object information
         label_file {str} -- label file path
-    
+        space [' ',',']:between boxEncode and label
+        encode: get boxEncode acc str encode, example 'bbox' or 'pointobb' etc.
     Returns:
         None
     """
