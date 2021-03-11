@@ -41,7 +41,7 @@ def imshow_bboxes(img_or_path,
 
     Args:
         img (str or ndarray): The image to be displayed.
-        bboxes (list or ndarray): A ndarray of shape (N, 4)
+        bboxes (list or ndarray): A ndarray of shape (N, 4),xmin, ymin, xmax, ymax
         labels (list or ndarray): A ndarray of shape (N, 1)
         scores (list or ndarray): A ndarray of shape (N, 1)
         ...
@@ -109,12 +109,14 @@ def imshow_bboxes(img_or_path,
 
     if show:
         if win_name == '':
-            cv2.namedWindow("results", 0)
+            cv2.namedWindow("results", cv2.WINDOW_NORMAL)
             win_name = "results"
         cv2.imshow(win_name, img)
+
         if selectDir is not None:
             if cv2.waitKey(wait_time) == ord('y'):
-                shutil.copy(img_or_path,selectDir)
+                #shutil.copy(img_or_path,selectDir)
+                cv2.imwrite(selectDir, img)
             cv2.destroyAllWindows()
         else:
             cv2.waitKey(wait_time)
@@ -144,7 +146,8 @@ def imshow_rbboxes(img_or_path,
               win_name='',
               wait_time=0,
               out_file=None,
-              return_img=False):
+              return_img=False,
+              selectDir=None):
     """ Draw oriented bounding boxes on image
 
     Args:
@@ -221,8 +224,16 @@ def imshow_rbboxes(img_or_path,
     if show:
         cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
         cv2.imshow(win_name, img)
-        cv2.waitKey(wait_time)
-        cv2.destroyAllWindows()
+        #cv2.waitKey(wait_time)
+        #cv2.destroyAllWindows()
+        if selectDir is not None:
+            if cv2.waitKey(wait_time) == ord('y'):
+                #shutil.copy(img_or_path,selectDir)
+                cv2.imwrite(selectDir, img)
+            cv2.destroyAllWindows()
+        else:
+            cv2.waitKey(wait_time)
+            cv2.destroyAllWindows()
     if out_file is not None:
         dir_name = os.path.abspath(os.path.dirname(out_file))
         mkdir_or_exist(dir_name)
