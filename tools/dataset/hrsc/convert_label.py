@@ -1,33 +1,37 @@
 from pktool import HRSCReaderCls, get_files, simpletxt_dump, mkdir_or_exist
 import os
 
-xmlFolder = '/data/hrsc2016/release/v0/test/annotations/'
-saveTxt = '/data/pd/hrsc2016/v0/test/annotations/'
-mkdir_or_exist(saveTxt)
-
 clsPath='/home/pd/code/pktool/tools/dataset/hrsc/sysdata.xml'
+datasets=['test','trainval']
 
-clsReader = HRSCReaderCls(clsPath=clsPath, layer=1)
+for dataset in datasets:
 
-clsDict = clsReader.getclsDict()
-print(clsDict)
+    xmlFolder = '/data/hrsc2016/release/v0/{}/annotations/'.format(dataset)
 
-xmlList,_=get_files(xmlFolder,_ends=['*.xml'])
+    saveTxt = '/data/pd/hrsc2016/ship/v0/{}/annotations/'.format(dataset)
+    mkdir_or_exist(saveTxt)
 
-for xmlfile in xmlList:
-    basename = os.path.basename(xmlfile)
-    filename, fmt = os.path.splitext(basename)
+    clsReader = HRSCReaderCls(clsPath=clsPath, layer=0)
 
-    shapes = clsReader.parseXML(xmlfile)
+    clsDict = clsReader.getclsDict()
+    print(clsDict)
 
-    label_save_file = os.path.join(saveTxt,filename+'.txt')
-    objects = []
-    for shape in shapes:
+    xmlList,_=get_files(xmlFolder,_ends=['*.xml'])
 
-        obj = {}
-        obj['label'] = clsDict[shape[0]]
-        obj['rbbox'] = shape[1]
-        objects.append(obj)
+    for xmlfile in xmlList:
+        basename = os.path.basename(xmlfile)
+        filename, fmt = os.path.splitext(basename)
 
-    simpletxt_dump(objects, label_save_file, encode='rbbox')
-    print(label_save_file)
+        shapes = clsReader.parseXML(xmlfile)
+
+        label_save_file = os.path.join(saveTxt,filename+'.txt')
+        objects = []
+        for shape in shapes:
+
+            obj = {}
+            obj['label'] = clsDict[shape[0]]
+            obj['rbbox'] = shape[1]
+            objects.append(obj)
+
+        simpletxt_dump(objects, label_save_file, encode='rbbox')
+        print(label_save_file)
