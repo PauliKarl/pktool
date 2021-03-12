@@ -7,15 +7,15 @@ font = FontProperties(fname=r"C:\Windows\Fonts\simhei.ttf", size=14)
 
 
 
-plt.bar(1, 747, label='Cargo vessel')
-plt.bar(2, 765, label='Destroyer')
-plt.bar(3, 178, label='Submarine')
-plt.bar(4, 534, label='Amphibious ship')
-plt.bar(5, 501, label='Cruiser')
-plt.bar(6, 299, label='Aircraft carrier')
-plt.bar(7, 484, label='Frigate')
-plt.bar(8, 495, label='Warship')
-plt.bar(9, 1356, label='Ship')
+plt.bar(1, 747, label='Cargo vessel', color='yellow')
+plt.bar(2, 765, label='Destroyer',color='green')
+plt.bar(3, 178, label='Submarine',color='orange')
+plt.bar(4, 534, label='Amphibious ship',color='purple')
+plt.bar(5, 501, label='Cruiser',color='cyan')
+plt.bar(6, 299, label='Aircraft carrier',color='magenta')
+plt.bar(7, 484, label='Frigate',color='brown')
+plt.bar(8, 495, label='Warship',color='red')
+plt.bar(9, 1356, label='Ship',color='blue')
 
 plt.legend()
 

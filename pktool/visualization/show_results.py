@@ -217,7 +217,7 @@ def imshow_rbboxes(img_or_path,
 
         if show_label:
             #cv2ImgAddText(img, label_str, left=cx, top=cy-5,textColor=current_color, textSize=10)
-            cv2.putText(img, label_str, (cx, cy-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, fontScale = 0.6, color = current_color, thickness = 2, lineType = 8)
+            cv2.putText(img, label_str, (cx, cy-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, fontScale = 1.0, color = current_color, thickness = 2, lineType = 8)
         if show_score:
             cv2.putText(img, label_str + "{:.2f}".format(score), (cx, cy), cv2.FONT_HERSHEY_COMPLEX_SMALL, fontScale = 1.0, color = current_color, thickness = 1, lineType = 8)
 

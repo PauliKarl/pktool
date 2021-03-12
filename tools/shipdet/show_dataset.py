@@ -6,7 +6,7 @@ import os
 from pktool import  pointobb2thetaobb, imshow_rbboxes
 
 if __name__=='__main__':
-    dataset = 'rs'
+    dataset = 'ext'
 
     img_path = '/data/pd/{}/ship/v1/images'.format(dataset)
     label_path = '/data/pd/{}/ship/v1/labels'.format(dataset)
