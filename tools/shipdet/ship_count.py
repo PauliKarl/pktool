@@ -1,6 +1,6 @@
 from pktool import simpletxt_parse, get_files, pointobb2thetaobb
 
-datasets = ['dota-v1.5','hrsc2016','rs']
+datasets = ['dota-v1.5','hrsc2016','rs','ext']
 
 if __name__=='__main__':
     total = [0,0,0,0]

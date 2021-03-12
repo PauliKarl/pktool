@@ -35,6 +35,7 @@ if __name__ == "__main__":
     mkdir_or_exist(filtered_label_path)
 
     filter_count = 1
+    have_count = 0
     progress_bar = mmcv.ProgressBar(len(os.listdir(origin_label_path)))
     for label_name in os.listdir(origin_label_path):
         image_objects = dota_parse(os.path.join(origin_label_path, label_name))
@@ -44,6 +45,7 @@ if __name__ == "__main__":
                 filter_count += 1
                 continue
             else:
+                have_count+=1
                 image_object['label'] = convert_classes[image_object['label']]
                 filtered_objects.append(image_object)
 

@@ -1,10 +1,10 @@
-from pktool import HRSCReaderCls, get_files, simpletxt_dump, mkdir_or_exist, simpletxt_parse
+from pktool import HRSCReaderCls, simpletxt_parse
 import os
 
 
 clsPath='/home/pd/code/pktool/tools/dataset/hrsc/sysdata.xml'
 
-clsReader = HRSCReaderCls(clsPath=clsPath, layer=1)
+clsReader = HRSCReaderCls(clsPath=clsPath, layer=2)
 
 clsDict = clsReader.getclsDict()
 
@@ -15,7 +15,7 @@ datasets = ['test', 'trainval']
 
 for dataset in datasets:
 
-    saveTxt = '/data/pd/hrsc2016/v0/{}/annotations/'.format(dataset)
+    saveTxt = '/data/pd/hrsc2016/ship/v0/{}/annotations/'.format(dataset)
 
     for txtfile in os.listdir(saveTxt):
         txtPath = os.path.join(saveTxt,txtfile)
