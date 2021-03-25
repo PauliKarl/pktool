@@ -3,11 +3,14 @@ import random
 import six
 import cv2
 import os
-from pktool import  imshow_rbboxes
+from pktool import  pointobb2thetaobb, imshow_rbboxes
 
 if __name__=='__main__':
-    img_path = '/data/pd/rs/ship/v0/images'
-    label_path = '/data/pd/rs/ship/v0/labels'
+    dataset = 'rs'
+    version = 'v0'
+
+    img_path = '/data2/pd/sdc/shipdet/{}/{}/trainval/images'.format(dataset,version)
+    label_path = '/data2/pd/sdc/shipdet/{}/{}/trainval/labels'.format(dataset,version)
 
     for label_file in os.listdir(label_path):
         img_file = img_path + "/" + label_file.split('.txt')[0] + '.png'
@@ -19,8 +22,8 @@ if __name__=='__main__':
             lines = f.readlines()
         for line in lines:
             line = line.rstrip().split(' ')
-            theta = [float(_) for _ in line[0:5]]
-            rbboxes.append(theta)
+            points = [float(_) for _ in line[0:8]]
+            rbboxes.append(points)
             labels.append(1)
         imshow_rbboxes(img_file,rbboxes,labels=labels)
 

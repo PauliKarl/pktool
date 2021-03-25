@@ -6,10 +6,10 @@ import os
 from pktool import  pointobb2thetaobb, imshow_rbboxes
 
 if __name__=='__main__':
-    dataset = 'ext'
+    dataset = 'rs'
 
-    img_path = '/data/pd/{}/ship/v1/images'.format(dataset)
-    label_path = '/data/pd/{}/ship/v1/labels'.format(dataset)
+    img_path = '/data2/pd/sdc/shipdet/{}/v0/trainval/images'.format(dataset)
+    label_path = '/data2/pd/sdc/shipdet/{}/v0/trainval/labels'.format(dataset)
 
     for label_file in os.listdir(label_path):
         img_file = img_path + "/" + label_file.split('.txt')[0] + '.png'
@@ -22,7 +22,7 @@ if __name__=='__main__':
         for line in lines:
             line = line.rstrip().split(' ')
             points = [float(_) for _ in line[0:8]]
-            rbboxes.append(pointobb2thetaobb(points))
+            rbboxes.append(points)
             labels.append(1)
         imshow_rbboxes(img_file,rbboxes,labels=labels)
 

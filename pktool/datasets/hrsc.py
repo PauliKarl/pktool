@@ -20,6 +20,8 @@ class HRSCReaderCls:
         self.clsPath = clsPath
         self.clsDict = {}
         self.layer = layer
+        self.MaxImgWidth = 0
+        self.MinImgWidth = 10240
         assert self.layer in [0,1,2],  "Unsupport layer, only for 0,1,2"
 
 
@@ -72,6 +74,11 @@ class HRSCReaderCls:
 
         parser = etree.XMLParser(encoding='utf-8')
         xmltree = ElementTree.parse(xmlFile, parser=parser).getroot()
+
+        width = int(xmltree.find('Img_SizeWidth').text)
+        height = int(xmltree.find('Img_SizeHeight').text)
+        self.MaxImgWidth = max(self.MaxImgWidth,width,height)
+        self.MinImgWidth = min(self.MinImgWidth,width,height)
         HRSC_Objects = xmltree.find('HRSC_Objects')
         for HRSC_Object in HRSC_Objects.findall('HRSC_Object'):
             class_id = int(HRSC_Object.find('Class_ID').text)

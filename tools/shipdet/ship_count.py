@@ -1,12 +1,14 @@
 from pktool import simpletxt_parse, get_files, pointobb2thetaobb
 
-datasets = ['dota-v1.5','hrsc2016','rs','ext']
-
+# datasets = ['dota-v1.5','hrsc2016','rs','ext']
+datasets = ['dota2.0','hrsc2016','rs']
 if __name__=='__main__':
     total = [0,0,0,0]
     for dataset in datasets:
 
-        label_path = '/data/pd/{}/ship/v1/labels'.format(dataset)
+        # label_path = '/data2/pd/{}/ship/v1/labels'.format(dataset)
+        label_path = '/data2/pd/sdc/shipdet/{}/v0/trainval/labels'.format(dataset)
+
         label_list,num = get_files(label_path,_ends=["*.txt"])
 
         instances = 0

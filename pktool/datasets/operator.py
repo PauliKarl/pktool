@@ -2,6 +2,7 @@ import os
 import shutil
 import numpy as np
 import pktool
+import cv2
 
 def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.8, image_format='.png', label_format='.txt', seed=0):
     """Generate trainval and test sets from origin set by copying files randomly.
@@ -75,3 +76,25 @@ def split_image(img, subsize=1024, gap=200, mode='keep_all'):
             coordinate = (start_x, start_y)
             subimages[coordinate] = subimage
     return subimages
+
+def padding_image(img,pad_top,pad_bottom,pad_left,pad_right,paddingType=cv2.BORDER_CONSTANT,value=0):
+    """padding source image
+    args:
+        img: source image, for example a np.ndarray [height, width, channel]
+        pad_x:int,For example, pad_top=1, pad_bottom=1, pad_left=1, pad_right=1 mean that 1 pixel-wide border needs 
+        paddingType: padding style. 
+            cv2.BORDER_CONSTANT---padding with value
+            cv2.BORDER_REFLECT ---e.g. gfedcb|abcdefgh|gfedcba
+            cv2.BORDER_REFLECT_101 or cv2.BORDER_DEFAULT---gfedcb|abcdefgh|gfedcba
+            cv2.BORDER_REPLICATE---aaaaaa|abcdefgh|hhhhhhh
+            cv2.BORDER_WRAP---cdefgh|abcdefgh|abcdefg
+        value: if paddingType is cv2.BORDER_CONSTANT, value must be int
+    return:
+        img: padded images
+    """
+    if  not isinstance(img,np.ndarray):
+        raise TypeError('argument img must be numpy.ndarray')
+    
+    img = cv2.copyMakeBorder(img,pad_top,pad_bottom,pad_left,pad_right,paddingType,value=value)
+
+    return img
