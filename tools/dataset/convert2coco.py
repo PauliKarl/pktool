@@ -8,7 +8,7 @@ import mmcv
 from pycocotools import mask as maskUtils
 from pktool import Convert2COCO, pointobb2bbox, bbox2pointobb, pointobb_best_point_sort, pointobb_extreme_sort
 
-class xView2COCO(Convert2COCO):
+class SDC2COCO(Convert2COCO):
     def __generate_coco_annotation__(self, annotpath, imgpath):
         """
         docstring here
@@ -50,7 +50,7 @@ class xView2COCO(Convert2COCO):
 
         with open(label_file, 'r') as f:
             lines = f.readlines()
-        #lines = open(label_file, 'r').readlines()
+        # lines = open(label_file, 'r').readlines()
         for line in lines:
             
             obj_struct = {}
@@ -91,12 +91,12 @@ if __name__ == "__main__":
     #args = parse_args()
 
     # basic dataset information
-    info = {"year" : 2020,
-            "version" : "1.5",
-            "description" : "xView-COCO",
+    info = {"year" : 2021,
+            "version" : "1.0",
+            "description" : "sdc-COCO",
             "contributor" : "paulikarl",
             "url" : "paulikarl.cn",
-            "date_created" : "2020"
+            "date_created" : "2021"
             }
     
     licenses = [{"id": 1,
@@ -107,59 +107,28 @@ if __name__ == "__main__":
     # DOTA dataset's information
     image_format='.png'
     anno_format='.txt'
-    core_dataset = 'ship'
+    core_dataset = 'shipdet'
 
-    original_class = {'船-两栖指挥舰-蓝岭级-蓝岭号':1, '船-航空母舰-尼米兹级-里根号':2, '船-驱逐舰-阿利伯克级-马斯廷号':3, 
-                        '船-巡洋舰-提康德罗加级-安提坦号':4, '船-巡洋舰-提康德罗加级-钱斯洛斯维尔号':4, '船-军辅船-NULL-NULL':5, 
-                        '船-巡洋舰-提康德罗加级-夏伊洛号':4, '船-驱逐舰-阿利伯克级-巴里号':3, '船-驱逐舰-阿利伯克级-本福德号':3,
-                        '船-驱逐舰-阿利伯克级-威尔伯号':3, '船-驱逐舰-阿利伯克级-麦凯恩号':3, '船-驱逐舰-阿利伯克级-斯坦赛姆号':3,
-                        '船-驱逐舰-旗风级-旗风号':6, '船-驱逐舰-金刚级-金刚号':7, '船-驱逐舰-朝雾级-天雾号':8, 
-                        '船-驱逐舰-秋月级-照月号':9, '船-驱逐舰-高波级-大波号':10, '船-扫雷母舰-浦贺级-浦贺号':11,
-                        '船-海洋观测舰--二见级-若狭号':12, '船-潜艇救难舰--NULL-千代田号':13, '船-潜艇-NULL-NULL':14,
-                        '船-驱逐舰-阿利伯克级-米利厄斯号':3, '船-两栖指挥舰舰-蓝岭级-蓝领号':1, '船-巡洋舰-提康德罗加级-夏洛伊号':4,
-                        '船-巡洋舰-天雾级-海雾号':15, '船-护卫舰-阿武隈级-阿武隈号':16, '船-巡洋舰-金刚级-雾岛号':17,
-                        '船-巡洋舰-高波级-高波号':18, '船-两栖登陆舰-海洋之子级-海洋之子号':19, '船-潜艇--NULL-NULL':14,
-                        '船-直升机驱逐舰--出云级-出云号':20, '船-驱逐舰-村雨级-村雨号':21, '船-驱逐舰--飞鸟级-飞鸟号':22,
-                        '船-海洋观测舰--二见级-日南号':12}
-    converted_class = [{'supercategory': 'none', 'id': 1,  'name': '船-两栖指挥舰-蓝岭级'},
-        {'supercategory': 'none', 'id': 2,  'name': '船-航空母舰-尼米兹级'},
-        {'supercategory': 'none', 'id': 3,  'name': '船-驱逐舰-阿利伯克级'},
-        {'supercategory': 'none', 'id': 4,  'name': '船-巡洋舰-提康德罗加级'},
-        {'supercategory': 'none', 'id': 5,  'name': '船-军辅船-NULL'},
-        {'supercategory': 'none', 'id': 6,  'name': '船-驱逐舰-旗风级'},
-        {'supercategory': 'none', 'id': 7,  'name': '船-驱逐舰-金刚级'},
-        {'supercategory': 'none', 'id': 8,  'name': '船-驱逐舰-朝雾级'},
-        {'supercategory': 'none', 'id': 9,  'name': '船-驱逐舰-秋月级'},
-        {'supercategory': 'none', 'id': 10,  'name': '船-驱逐舰-高波级'},
-        {'supercategory': 'none', 'id': 11,  'name': '船-扫雷母舰-浦贺级'},
-        {'supercategory': 'none', 'id': 12,  'name': '船-海洋观测舰--二见级'},
-        {'supercategory': 'none', 'id': 13,  'name': '船-潜艇救难舰--NULL'},
-        {'supercategory': 'none', 'id': 14,  'name': '船-潜艇-NULL-NULL'},
-        {'supercategory': 'none', 'id': 15,  'name': '船-巡洋舰-天雾级'},
-        {'supercategory': 'none', 'id': 16,  'name': '船-护卫舰-阿武隈级'},
-        {'supercategory': 'none', 'id': 17,  'name': '船-巡洋舰-金刚级'},
-        {'supercategory': 'none', 'id': 18,  'name': '船-巡洋舰-高波级'},
-        {'supercategory': 'none', 'id': 19,  'name': '船-两栖登陆舰-海洋之子级'},
-        {'supercategory': 'none', 'id': 20,  'name': '船-直升机驱逐舰--出云级'},
-        {'supercategory': 'none', 'id': 21,  'name': '船-驱逐舰-村雨级'},
-        {'supercategory': 'none', 'id': 22,  'name': '船-驱逐舰--飞鸟级'},
+    original_class = {'ship':1,}
+    converted_class = [{'supercategory': 'none', 'id': 1,  'name': 'ship'},
     ]
-    imagesets = ['trainval']
-    release_version = 'v3'
+    imagesets = ['test','trainval']
+    release_version = 'v0'
 
     pointobb_sort_method = 'best' # or "extreme"
     pointobb_sort_function = {"best": pointobb_best_point_sort,
                             "extreme": pointobb_extreme_sort}
-    #/data/pd/xview/v1/
-    for imageset in imagesets:
-        imgpath = '/home/pd/data/images'
-        annopath = '/home/pd/data/labels'
 
-        save_path = '/home/pd/data/{}/{}/coco/annotations'.format(core_dataset, release_version)
+    for imageset in imagesets:
+        imgpath = '/data2/pd/sdc/shipdet/v0/{}/images/'.format(imageset)
+        annopath = '/data2/pd/sdc/shipdet/v0/{}/labels/'.format(imageset)
+
+        save_path = '/data2/pd/sdc/{}/{}/coco/annotations'.format(core_dataset, release_version)
+
         if not os.path.exists(save_path):
             os.makedirs(save_path)
 
-        xView = xView2COCO(imgpath=imgpath,
+        sdc = SDC2COCO(imgpath=imgpath,
                         annopath=annopath,
                         image_format=image_format,
                         anno_format=anno_format,
@@ -170,14 +139,14 @@ if __name__ == "__main__":
                         groundtruth=True,
                         small_object_area=0)
 
-        images, annotations = xView.get_image_annotation_pairs()
+        images, annotations = sdc.get_image_annotation_pairs()
 
-        json_data = {"info" : xView.info,
+        json_data = {"info" : sdc.info,
                     "images" : images,
-                    "licenses" : xView.licenses,
-                    "type" : xView.type,
+                    "licenses" : sdc.licenses,
+                    "type" : sdc.type,
                     "annotations" : annotations,
-                    "categories" : xView.categories}
+                    "categories" : sdc.categories}
 
         with open(os.path.join(save_path, core_dataset + "_" + imageset + "_" + release_version + ".json"), "w") as jsonfile:
             json.dump(json_data, jsonfile, sort_keys=True, indent=4)

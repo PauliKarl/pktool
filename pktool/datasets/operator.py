@@ -4,7 +4,7 @@ import numpy as np
 import pktool
 import cv2
 
-def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.8, image_format='.png', label_format='.txt', seed=0):
+def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.8, image_format='.png', label_format='.txt', seed=0,is_print=False):
     """Generate trainval and test sets from origin set by copying files randomly.
     
     Arguments:
@@ -34,16 +34,19 @@ def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.
     file_names = sorted(file_names)
     np.random.shuffle(file_names)
 
+    print(len(file_names))
     trainval_file_names = file_names[0 : int(len(file_names) * trainval_rate)]
     test_file_names = file_names[int(len(file_names) * trainval_rate):]
 
     for trainval_file_name in trainval_file_names:
-        print("From {} to {}.".format(os.path.join(src_label_path, trainval_file_name), os.path.join(trainval_dst_label_path, trainval_file_name)))
+        if is_print:
+            print("From {} to {}.".format(os.path.join(src_label_path, trainval_file_name), os.path.join(trainval_dst_label_path, trainval_file_name)))
         shutil.copy(os.path.join(src_label_path, trainval_file_name + label_format), os.path.join(trainval_dst_label_path, trainval_file_name + label_format))
         shutil.copy(os.path.join(src_image_path, trainval_file_name + image_format), os.path.join(trainval_dst_image_path, trainval_file_name + image_format))
 
     for test_file_name in test_file_names:
-        print("From {} to {}.".format(os.path.join(src_label_path, test_file_name), os.path.join(test_dst_label_path, test_file_name)))
+        if is_print:
+            print("From {} to {}.".format(os.path.join(src_label_path, test_file_name), os.path.join(test_dst_label_path, test_file_name)))
         shutil.copy(os.path.join(src_label_path, test_file_name + label_format), os.path.join(test_dst_label_path, test_file_name + label_format))
         shutil.copy(os.path.join(src_image_path, test_file_name + image_format), os.path.join(test_dst_image_path, test_file_name + image_format))
 
@@ -51,7 +54,7 @@ def shuffle_dataset(origin_dataset_dir, trainval_dir, test_dir, trainval_rate=0.
 def split_image(img, subsize=1024, gap=200, mode='keep_all'):
     img_height, img_width = img.shape[0], img.shape[1]
 
-    start_xs = np.arange(0, img_width, subsize - gap)
+    start_xs = np.arange(0, img_width-gap, subsize - gap)
     if mode == 'keep_all':
         start_xs[-1] = img_width - subsize if img_width - start_xs[-1] <= subsize else start_xs[-1]
     elif mode == 'drop_boundary':
@@ -59,7 +62,7 @@ def split_image(img, subsize=1024, gap=200, mode='keep_all'):
             start_xs = np.delete(start_xs, -1)
     start_xs[-1] = np.maximum(start_xs[-1], 0)
 
-    start_ys = np.arange(0, img_height, subsize - gap)
+    start_ys = np.arange(0, img_height-gap, subsize - gap)
     if mode == 'keep_all':
         start_ys[-1] = img_height - subsize if img_height - start_ys[-1] <= subsize else start_ys[-1]
     elif mode == 'drop_boundary':

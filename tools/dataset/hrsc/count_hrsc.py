@@ -1,4 +1,4 @@
-from pktool import HRSCReaderCls, simpletxt_parse
+from pktool import HRSCReaderCls, simpletxt_parse,get_files
 import os
 
 
@@ -9,23 +9,29 @@ clsReader = HRSCReaderCls(clsPath=clsPath, layer=2)
 clsDict = clsReader.getclsDict()
 
 count_dict = {}
-print(clsDict)
+# print(clsDict)
 
 datasets = ['test', 'trainval']
 
 for dataset in datasets:
 
-    saveTxt = '/data/pd/hrsc2016/ship/v0/{}/annotations/'.format(dataset)
+    xmlFolder = '/data/hrsc2016/release/v0/{}/annotations/'.format(dataset)
 
-    for txtfile in os.listdir(saveTxt):
-        txtPath = os.path.join(saveTxt,txtfile)
+    xmlList,num=get_files(xmlFolder,_ends=['*.xml'])
+    print(num)
 
-        objects = simpletxt_parse(txtPath,boxType='thetaobb')
-        for obj in objects:
-            if obj['label'] not in count_dict:
-                count_dict[obj['label']]=1
+    for xmlfile in xmlList:
+        basename = os.path.basename(xmlfile)
+        filename, fmt = os.path.splitext(basename)
+
+        shapes = clsReader.parseXML(xmlfile)
+
+        # objects = simpletxt_parse(txtPath,boxType='thetaobb')
+        for shape in shapes:
+            if clsDict[shape[0]] not in count_dict:
+                count_dict[clsDict[shape[0]]]=1
             else:
-                count_dict[obj['label']]+=1
+                count_dict[clsDict[shape[0]]]+=1
 
 print(count_dict)
     

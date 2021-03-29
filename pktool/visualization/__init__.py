@@ -1,4 +1,4 @@
-from .color import is_str, color_val
+from .color_define import is_str, color_val
 from .show_results import imshow_rbboxes, imshow_bboxes
 
 

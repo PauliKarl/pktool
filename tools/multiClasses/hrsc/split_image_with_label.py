@@ -1,69 +1,72 @@
-import os
 import numpy as np
 import cv2
-from pktool import split_image, mkdir_or_exist, simpletxt_dump, visdrone_parse, pointobb2thetaobb,thetaobb2pointobb, simpletxt_parse
-from pktool import get_files,get_key
+from PIL import Image
+from skimage.io import imread
+from pktool import split_image, mkdir_or_exist, simpletxt_dump, visdrone_parse, pointobb2thetaobb,thetaobb2pointobb, simpletxt_parse, rescale_size,imresize
+from pktool import get_files, padding_image, get_key
+import os 
 
 
-imgFormat = '.bmp'
-datasets = ['test','trainval']
+CLASSES = {'Frigate': 1, 'Cruiser': 2, 'Aircraft carrier': 3, 'Ship': 4, 'Amphibious ship': 5, 'Cargo vessel': 6, 'Destroyer': 7, 'Warship': 8, 'Loose pulley': 9, 'Command ship': 10, 'Hovercraft': 11, 'Submarine': 12}
 
-if __name__ == '__main__':
+IMG_LENGTH_SDC = 1024
+GAP = 200
 
-    subimage_size = 1024
 
-    gap = 200
+def split2sdc(origin_label_path,origin_image_path,splited_image_path,splited_label_path):
 
-    for dataset in datasets:
+    label_list,_ = get_files(origin_label_path,_ends=["*.txt"])
+    for idx, label_file in enumerate(label_list):
+        print(idx, label_file)
+        file_name=os.path.split(label_file)[1].split('.txt')[0]
+        image_file = origin_image_path+ file_name + '.png'
 
-        filtered_label_path = '/data/pd/hrsc2016/multiship/v0/{}/annotations/'.format(dataset)
+        # image_file = origin_image_path + "11012"+ '.png'
+        img = cv2.imread(image_file)
+        height,width = img.shape[0],img.shape[1]
 
-        image_path =  '/data/pd/hrsc2016/multiship/v0/{}/images/'.format(dataset)
-        
-        image_save_path = '/data/pd/hrsc2016/multiship/v1/images'
-        mkdir_or_exist(image_save_path)
-        label_save_path = '/data/pd/hrsc2016/multiship/v1/labels'
-        mkdir_or_exist(label_save_path)
+        objects = simpletxt_parse(label_file,space=' ',boxType='points')
+        bboxes = np.array([pointobb2thetaobb(obj['points']) for obj in objects]).reshape(-1,5)
+        labels = np.array([CLASSES[obj['label']] for obj in objects])
 
-        # print(os.listdir(label_path))
-        label_list,_ = get_files(filtered_label_path,_ends=["*.txt"])
-
-        for idx, label_file in enumerate(label_list):
-            print(idx, label_file)
-            file_name=os.path.split(label_file)[1].split('.txt')[0]
-            image_file = image_path + file_name + imgFormat
-
-            img = cv2.imread(image_file)
-
-            objects = simpletxt_parse(label_file,space=' ',boxType='thetaobb')
-
-            bboxes = []
-            labels = []
-
-            tmp_classname = {}
-            class_id = 0
-            for ship in objects:
-                label = ship['label']
-                thetaobb = ship['thetaobb']
-
-                if label not in tmp_classname:
-                    tmp_classname[label] = class_id
-                    labels.append(class_id)
-                    class_id+=1
-                else:
-                    # label = tmp_classname[label]
-                    labels.append(tmp_classname[label])
+        # if img.shape[-1] != 3:
+        #     print(file_name)
+        #     continue
+        if max(height,width)<IMG_LENGTH_SDC:
+            #如果两条边都小于1024，保持比率resize到长边为1024，然后padding短边
+            new_size, scale_factor = rescale_size((width, height), (IMG_LENGTH_SDC,IMG_LENGTH_SDC), return_scale=True)
+            rescaled_img = imresize(
+                img, new_size, interpolation='bilinear', backend='cv2')
+            
+            bboxes[:,:4] = bboxes[:,:4]*scale_factor
+            #padding new_size=(w,h)
+            if min(new_size)<IMG_LENGTH_SDC:
+                pad_bottom = max(IMG_LENGTH_SDC-new_size[1],0)
+                pad_right = max(IMG_LENGTH_SDC-new_size[0],0)
+                rescaled_img=padding_image(rescaled_img,0,pad_bottom,0,pad_right,paddingType=cv2.BORDER_CONSTANT,value=0)
+            #save img
+            image_save_file = splited_image_path + file_name +'.png'
+            label_save_file = splited_label_path + file_name +'.txt'
+            cv2.imwrite(image_save_file, rescaled_img)
+            objects = []
+            for i in range(labels.shape[0]):
+                subimage_objects = dict()
+                subimage_objects['points'] = thetaobb2pointobb(bboxes[i,:])
+                subimage_objects['label'] = get_key(CLASSES,labels[i]) 
+                objects.append(subimage_objects)
+            simpletxt_dump(objects, label_save_file, encode='points')
+        else:
+            if min(height,width)<IMG_LENGTH_SDC:
+                #当有一边小于1024，将小边resize到1024，然后split
+                scale_factor = IMG_LENGTH_SDC / min(height,width)
+                new_size, scale_factor = rescale_size((width, height), scale_factor, return_scale=True)
+                rescaled_img = imresize(
+                    img, new_size, interpolation='bilinear', backend='cv2')
                 
-                bboxes.append(thetaobb)
-
-            if img.shape[-1] != 3:
-                print(file_name)
-                continue
-
-            bboxes = np.array(bboxes)
-            labels = np.array(labels)
-
-            subimages = split_image(img, subsize=subimage_size, gap=gap)
+                bboxes[:,:4] = bboxes[:,:4]*scale_factor
+                img = rescaled_img
+            #当全部大于1024时，正常分割
+            subimages = split_image(img, subsize=IMG_LENGTH_SDC, gap=GAP)
             subimage_coordinates = list(subimages.keys())
             bboxes_ = bboxes.copy()
             labels_ = labels.copy()
@@ -72,28 +75,79 @@ if __name__ == '__main__':
                 continue
 
             for subimage_coordinate in subimage_coordinates:
-                objects = []
 
                 bboxes_[:, 0] = bboxes[:, 0] - subimage_coordinate[0]
                 bboxes_[:, 1] = bboxes[:, 1] - subimage_coordinate[1]
-                cx_bool = np.logical_and(bboxes_[:, 0] >= 0, bboxes_[:, 0] < subimage_size)
-                cy_bool = np.logical_and(bboxes_[:, 1] >= 0, bboxes_[:, 1] < subimage_size)
+                cx_bool = np.logical_and(bboxes_[:, 0] >= 0, bboxes_[:, 0] < IMG_LENGTH_SDC)
+                cy_bool = np.logical_and(bboxes_[:, 1] >= 0, bboxes_[:, 1] < IMG_LENGTH_SDC)
                 subimage_bboxes = bboxes_[np.logical_and(cx_bool, cy_bool)]
                 subimage_labels = labels_[np.logical_and(cx_bool, cy_bool)]
 
                 if len(subimage_bboxes) == 0:
                     continue
-                img = subimages[subimage_coordinate]
+                subimg = subimages[subimage_coordinate]
                 if np.mean(img) == 0:
                     continue
 
-                label_save_file = os.path.join(label_save_path,'{}__{}_{}.txt'.format(file_name, subimage_coordinate[0],subimage_coordinate[1]))
-                image_save_file = os.path.join(image_save_path,'{}__{}_{}.png'.format(file_name, subimage_coordinate[0], subimage_coordinate[1]))
-                cv2.imwrite(image_save_file, img)
+                label_save_file = os.path.join(splited_label_path,'{}_{}_{}.txt'.format(file_name, subimage_coordinate[0],subimage_coordinate[1]))
+                image_save_file = os.path.join(splited_image_path,'{}_{}_{}.png'.format(file_name, subimage_coordinate[0], subimage_coordinate[1]))
+                if min(subimg.shape[:2])<IMG_LENGTH_SDC:
+                    print(file_name)
+                cv2.imwrite(image_save_file, subimg)
 
+                objects = []
                 for subimage_bbox, subimage_label in zip(subimage_bboxes, subimage_labels):
                     subimage_objects = dict()
                     subimage_objects['points'] = thetaobb2pointobb(subimage_bbox.tolist())
-                    subimage_objects['label'] = get_key(tmp_classname,subimage_label)
+                    subimage_objects['label'] = get_key(CLASSES,subimage_label)
                     objects.append(subimage_objects)
                 simpletxt_dump(objects, label_save_file,encode='points')
+    
+
+def split_all_to_SDC():
+    datasets_type = ['hrsc2016']
+    datasets=['test','trainval']
+    for dataset_type in datasets_type:
+        for dataset in datasets:
+            origin_label_path = '/data2/pd/sdc/multidet/{}/v0/{}/labels/'.format(dataset_type,dataset)
+            origin_image_path = '/data2/pd/sdc/multidet/{}/v0/{}/images/'.format(dataset_type,dataset)
+            
+            if not os.path.exists(origin_label_path):
+                print("skipping {}/{}".format(dataset_type,dataset))
+                continue
+            print("convert and slpiting {}/{}".format(dataset_type,dataset))
+            splited_image_path = '/data2/pd/sdc/multidet/{}/v1/{}/images/'.format(dataset_type,dataset)
+            splited_label_path = '/data2/pd/sdc/multidet/{}/v1/{}/labels/'.format(dataset_type,dataset)
+            mkdir_or_exist(splited_image_path)
+            mkdir_or_exist(splited_label_path)
+
+            split2sdc(origin_label_path,origin_image_path,splited_image_path,splited_label_path)
+
+def check_size_img():
+    flag = True
+    datasets_type = ['hrsc2016']
+    datasets=['test','trainval']
+    for dataset_type in datasets_type:
+        for dataset in datasets:
+            
+            print("checking {}/{}".format(dataset_type,dataset))
+            splited_image_path = '/data2/pd/sdc/multidet/{}/v1/{}/images/'.format(dataset_type,dataset)
+            if not os.path.exists(splited_image_path):
+                print("skipping{}/{}".format(dataset_type,dataset))
+                continue
+            for imgName in os.listdir(splited_image_path):
+                imgPath = splited_image_path + imgName
+                img = cv2.imread(imgPath)
+                if img.shape[0]==1024 and img.shape[1]==1024:
+                    continue
+                print('split failed images:{}'.format(imgPath))
+                flag = False
+    return flag
+
+
+if __name__ == '__main__':
+    split_all_to_SDC()
+    # if check_size_img():
+    #     print("split image ok!")
+    # else:
+    #     print("something wrong!")

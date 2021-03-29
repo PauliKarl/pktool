@@ -3,7 +3,8 @@ import cv2
 import os
 import shutil
 from pktool import thetaobb2pointobb, mkdir_or_exist
-from .color import is_str, color_val
+# from pktool import is_str,color_val
+from .color_define import is_str, color_val
 from PIL import Image, ImageDraw, ImageFont
 
  
@@ -138,6 +139,7 @@ def imshow_rbboxes(img_or_path,
               scores=None,
               score_threshold=0.0,
               colors='red',
+              colors_map = None,
               cls_map=None,
               show_label=False,
               show_score=False,
@@ -194,7 +196,11 @@ def imshow_rbboxes(img_or_path,
         colors[colors] = color_val(colors)
     else:
         max_label = max(labels)
-        colors = [color_val(_) for _ in range(max_label + 1)]
+        if colors_map is None:
+            colors = [color_val(_) for _ in range(max_label + 1)]
+        else:
+            colors = [color_val(colors_map[_]) for _ in range(max_label + 1)]
+
 
     for rbbox, label, score in zip(rbboxes, labels_vis, scores_vis):
         if score < score_threshold:
