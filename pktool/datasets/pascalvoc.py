@@ -223,7 +223,9 @@ class PascalVocReader:
         self.parseXML()
 
     def getShapes(self):
-        """return list[[label, points, direction, isRotated, difficult]]
+        """get object infos
+        
+        return list[[label, points, direction, isRotated, difficult]]
             label = object name
             points: list[tuple(x,y)x4]
             direction: angle or 0
@@ -259,8 +261,8 @@ class PascalVocReader:
         #label, points, direction, isRotated, difficult
 
     def rotatePoint(self, xc,yc, xp,yp, theta):        
-        xoff = xp-xc;
-        yoff = yp-yc;
+        xoff = xp-xc
+        yoff = yp-yc
 
         cosTheta = math.cos(theta)
         sinTheta = math.sin(theta)

@@ -12,6 +12,39 @@ from collections import defaultdict
 #import csv
 import pktool #import pointobb2bbox
 
+def fair1m_parse(xmlFile):
+    """parse FAIR1M style dataset xml label file
+    Arguments:
+        xmlFile:{str}--xml label file
+    returns:
+        list[dict],dict:{'points':[x1,y1,x2,y2,x3,y3,x4,y4],'label':className}
+    """
+    tree = ET.parse(xmlFile)
+    root = tree.getroot()
+    # print(root.find('size').find('height').text)
+    # print(root.find('size').find('width').text)
+    objects = []
+    for single_object in root.find('objects').findall('object'):
+        pointsEle = single_object.find('points')
+        object_struct = {}
+        object_struct['label'] =single_object.find('possibleresult').find('name').text
+        points = []
+        for point in pointsEle.findall('point'):
+            pointxy=point.text
+            x,y = pointxy.split(',')
+            points.append(float(x))
+            points.append(float(y))
+        object_struct['points'] = points[:8]
+        objects.append(object_struct)
+    return objects
+
+
+
+
+
+
+
+
 def voc_parse(label_file):
     """parse VOC style dataset label file
     
