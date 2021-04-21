@@ -35,13 +35,14 @@ def simple_bar():
 def added_bar():
     """叠加柱状图
     """
-    N = 12
-    # xlabel = ('Other ship', 'Destroyer', 'Cargo vessel', 'Amphibious ship', 'Cruiser','Frigate', 'Warship', 'Submarine', 'Aircraft carrier', 'Command ship', 'Hovercraft', 'Loose pulley')
-    xlabel = ('Others', 'Dest.', 'Carg.', 'Amph.', 'Crui.','Frig.', 'Wars.', 'Subm.', 'Airc.', 'Comm.', 'Hove.', 'Loos.')
-    Tval =(1369,672,573,382,359,303,304,299,250,113,113,13)
-    #{'Destroyer': 672, 'Warship': 304, 'Cruiser': 359, 'Amphibious ship': 382, 'Aircraft carrier': 250, 'Ship': 1369, 'Frigate': 303, 'Cargo vessel': 573, 'Command ship': 113, 'Submarine': 299, 'Loose pulley': 13, 'Hovercraft': 113}
-    Test = (324,148,124,103,91,97,72,59,52,29,13,3)
-    #{'Cargo vessel': 124, 'Destroyer': 148, 'Amphibious ship': 103, 'Ship': 324, 'Frigate': 97, 'Warship': 72, 'Cruiser': 91, 'Submarine': 59, 'Aircraft carrier': 52, 'Command ship': 29, 'Hovercraft': 13, 'Loose pulley': 3}
+    N = 16
+    # {'Cargo vessel': 4398, 'Ship': 2375, 'Motorboat': 1809, 'Fishing boat': 937, 'Destroyer': 659, 'Tugboat': 559, 'Loose pulley': 509, 'Warship': 409, 'Engineering ship': 374, 'Amphibious ship': 380, 'Cruiser': 359, 'Frigate': 301, 'Submarine': 288, 'Aircraft carrier': 249, 'Hovercraft': 113, 'Command ship': 114}
+    xlabel = ('Carg.', 'Ship', 'Moto.', 'Fish.', 'Dest.','Tugb.', 'Loos.', 'Wars.', 'Engi.', 'Amph.', 'Crui.', 'Frig.','Subm.','Airc.','Hove.','Comm.')
+
+    # {'Cargo vessel': 1131, 'Ship': 552, 'Motorboat': 801, 'Fishing boat': 477, 'Destroyer': 140, 'Tugboat': 101, 'Loose pulley': 119, 'Warship': 117, 'Engineering ship': 133, 'Amphibious ship': 105, 'Cruiser': 90, 'Frigate': 99, 'Submarine': 58, 'Aircraft carrier': 53, 'Hovercraft': 13, 'Command ship': 28}
+    Tval =(4398,2375,1809,937,659,559,509,409,374,380,359,301,288,249,113,114)
+    Test = (1131,552,801,477,140,101,119,117,133,105,90,99,58,53,13,28)
+
     ind = np.arange(N)    # the x locations for the groups
     width = 0.5       # the width of the bars: can also be len(x) sequence
     
@@ -53,7 +54,7 @@ def added_bar():
     plt.title('Instance with trainval and test')
     plt.xticks(ind, xlabel)
 
-    plt.yticks(np.arange(0, 2000, 500))
+    plt.yticks(np.arange(0, 5500, 500))
     plt.legend((p1[0], p2[0]), ('trainval', 'test'))
     plt.show()
 
@@ -75,4 +76,5 @@ def polar_bar():
     
 if __name__=="__main__":
 
-    simple_bar_sdc()
+    # simple_bar_sdc()
+    added_bar()

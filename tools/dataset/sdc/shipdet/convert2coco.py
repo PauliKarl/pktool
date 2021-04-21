@@ -34,6 +34,7 @@ class SDC2COCO(Convert2COCO):
                 continue
 
             coco_annotation['segmentation']=[object_struct['segmentation']]
+            coco_annotation['pointobb']=object_struct['segmentation']
             coco_annotation['bbox'] = bbox
             coco_annotation['category_id'] = label
             coco_annotation['area'] = np.float(area)
@@ -148,5 +149,5 @@ if __name__ == "__main__":
                     "annotations" : annotations,
                     "categories" : sdc.categories}
 
-        with open(os.path.join(save_path, core_dataset + "_" + imageset + "_" + release_version + ".json"), "w") as jsonfile:
+        with open(os.path.join(save_path, core_dataset + "_" + imageset + "_" + release_version + "_obb.json"), "w") as jsonfile:
             json.dump(json_data, jsonfile, sort_keys=True, indent=4)

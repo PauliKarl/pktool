@@ -84,33 +84,34 @@ def _segm2json(results,img_and_ID,cat_and_ID):
     """Convert instance segmentation results to COCO json style."""
     bbox_json_results = []
     segm_json_results = []
-    for imgName,result in results.items():##获取单个图像的检测结果result
-        img_id = img_and_ID[imgName]
-        scores, dets = result[0],result[1]
-        # det, seg = results[idx]##获取单个图像的检测结果
-        for idx in range(len(scores)):##单个图像中每个类别的检测结果遍历
-            # bbox and segm results
-            points = dets[idx]##获取单个类别的检测结果，即某一图像上某一类的预测结果
+    for catID,cat_result in enumerate(results):
+        for imgName,result in cat_result.items():##获取单个图像的检测结果result
+            img_id = img_and_ID[imgName]
+            scores, dets = result[0],result[1]
+            # det, seg = cat_result[idx]##获取单个图像的检测结果
+            for idx in range(len(scores)):##单个图像中每个类别的检测结果遍历
+                # bbox and segm results
+                points = dets[idx]##获取单个类别的检测结果，即某一图像上某一类的预测结果
 
-            data = dict()
-            data['image_id'] = img_id
-            data['bbox'] = points2xywh(points)##
-            data['score'] = float(scores[idx])
-            data['category_id'] = 1 ##
-            data['segmentation'] = points
-            bbox_json_results.append(data)
+                data = dict()
+                data['image_id'] = img_id
+                data['bbox'] = points2xywh(points)##
+                data['score'] = float(scores[idx])
+                data['category_id'] = catID+1 ##
+                data['segmentation'] = points
+                bbox_json_results.append(data)
 
-        for idx in range(len(scores)):##单个图像中每个类别的检测结果遍历
-            #segm results
-            points = dets[idx]##获取单个类别的检测结果，即某一图像上某一类的预测结果
+            for idx in range(len(scores)):##单个图像中每个类别的检测结果遍历
+                #segm results
+                points = dets[idx]##获取单个类别的检测结果，即某一图像上某一类的预测结果
 
-            data = dict()
-            data['image_id'] = img_id
-            data['bbox'] = points2xywh(points)##
-            data['score'] = float(scores[idx])
-            data['category_id'] = 1 ##
-            data['segmentation'] = [points]
-            segm_json_results.append(data)
+                data = dict()
+                data['image_id'] = img_id
+                data['bbox'] = points2xywh(points)##
+                data['score'] = float(scores[idx])
+                data['category_id'] = catID+1 ##
+                data['segmentation'] = [points]
+                segm_json_results.append(data)
 
     return bbox_json_results, segm_json_results
 
@@ -355,26 +356,37 @@ def evaluate(   ann_file,
 
 
 if __name__=='__main__':
-    CLASSES = ('ship', )
+    # CLASSES = ('ship', )
+    CLASSES=('Cargo vessel','Ship','Motorboat','Fishing boat','Destroyer','Tugboat','Loose pulley','Warship','Engineering ship','Amphibious ship','Cruiser','Frigate','Submarine','Aircraft carrier','Hovercraft','Command ship')
     IMG_FORMAT = ''
     
-    test_json_file = "/data2/pd/sdc/shipdet/v1/coco/annotations/shipdet_test_v1.json"
+    test_json_file = "/data2/pd/sdc/multidet/v0/coco/annotations/sdc_test_v0.json"
+    # results_dir='/data2/pd/sdc/multidet/v0/works_dir/aedet/faster_rcnn_RoITrans_r50_fpn_1x_shipdet/Task1_results_nms/'
+    results_dir = '/data2/pd/sdc/multidet/v0/works_dir/aedet/faster_rcnn_obb_r50_fpn_1x_multidet/Task1_results_nms/'
+    # results_txt='/data2/pd/sdc/multidet/v0/works_dir/aedet/faster_rcnn_obb_r50_fpn_1x_multidet/Task1_results_nms/Ship.txt'
 
-    results_txt = "/data2/pd/sdc/shipdet/v1/works_dir/aedet/faster_rcnn_obb_r50_fpn_1x_shipdet/Task1_results/person.txt"
+    # results_txt = '/data2/pd/sdc/shipdet/v1/works_dir/rcenter/res50/ship.txt'#'0.040 0.164 0.008 0.017 0.065 0.042')
+    # results_txt = '/home/pd/RotationDetection/tools/r3det/test_dota/FPN_Res50_r3det_1x_20210405/dota_res/Task1_ship.txt'
+    # results_txt = "/data2/pd/sdc/shipdet/v1/works_dir/aedet/retinanet_obb_r50_fpn_1x_shipdet/Task1_results_nms/person.txt"
     # results_txt = "/data2/pd/sdc/shipdet/v0/rotationDet/test_dota/FPN_Res50_sdc_1x_20210403/dota_res_r/Task1_ship.txt"
-    outfile_prefix = None 
+    outfile_prefix = None#'/data2/pd/sdc/multidet/v0/works_dir/aedet/faster_rcnn_obb_r50_fpn_1x_multidet/result'
     # outfile_prefix = results_txt.split('.txt')[0]
 
-    img_and_ID,cat_and_ID=load_imgID_and_catID(test_json_file)    
-    results = read_res_txt(results_txt)
+    img_and_ID,cat_and_ID=load_imgID_and_catID(test_json_file)
+    print(cat_and_ID)
+    results_all_cat = []
+    for cat in CLASSES:
+        result_txt = results_dir + cat + '.txt'
+        result = read_res_txt(result_txt)
+        results_all_cat.append(result)
     
-    result_files,tmp_dir = format_results(results,jsonfile_prefix=outfile_prefix,img_and_ID=img_and_ID,cat_and_ID=cat_and_ID)
+    result_files,tmp_dir = format_results(results_all_cat,jsonfile_prefix=outfile_prefix,img_and_ID=img_and_ID,cat_and_ID=cat_and_ID)
 
     eval_results = evaluate(test_json_file,
                             result_files,
                             metric='segm',#'segm','bbox'
                             jsonfile_prefix=None,
-                            classwise=False,
+                            classwise=True,
                             proposal_nums=(100, 300, 1000))
     if tmp_dir is not None:
         tmp_dir.cleanup()

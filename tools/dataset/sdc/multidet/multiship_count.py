@@ -1,18 +1,24 @@
 from pktool import HRSCReaderCls, simpletxt_parse,pointobb2thetaobb
 import os
-
 def count_sdc_multi():
-    count_dict = {}
+    classes = ('Cargo vessel','Ship','Motorboat','Fishing boat','Destroyer','Tugboat','Loose pulley','Warship','Engineering ship','Amphibious ship','Cruiser','Frigate','Submarine','Aircraft carrier','Hovercraft','Command ship')
+    cats = {}
+    for cat in classes:
+        cats[cat]=0
+
     image_number = 0
 
     instances = 0
     smallShip = 0
     largeShip = 0
     datasets_type = ['multidet']
-    datasets = ['test','trainval']
+    # datasets = ['test','trainval']
+    # datasets_type = ['shipdet']
+    datasets = ['test']
+    version = 'v0'
     for dataset_type in datasets_type:
         for dataset in datasets:
-            label_path = '/data2/pd/sdc/{}/v0/{}/labels/'.format(dataset_type,dataset)
+            label_path = '/data2/pd/sdc/{}/{}/{}/labels/'.format(dataset_type,version,dataset)
             if not os.path.exists(label_path):
                 print("skipping {}/{}".format(dataset_type,dataset))
                 continue
@@ -25,18 +31,15 @@ def count_sdc_multi():
 
                     instances+=1
                     points = obj['points']
+                    cats[obj['label']]+=1
                     thetabox = pointobb2thetaobb(points)
                     if thetabox[2]*thetabox[3]<1024:
                         smallShip+=1
                     elif thetabox[2]*thetabox[3]>9216:
                         largeShip+=1
 
-                    if obj['label'] not in count_dict:
-                        count_dict[obj['label']]=1
-                    else:
-                        count_dict[obj['label']]+=1
 
-    print(count_dict)
+    print(cats)
     print(image_number)
     print("instances {}, smallShip {}, largeShip {}".format(instances,smallShip,largeShip))
 
@@ -81,5 +84,5 @@ def count_all_subdataset():
 
 
 if __name__=="__main__":
-    # count_sdc_multi()
-    count_all_subdataset()
+    count_sdc_multi()
+    # count_all_subdataset()

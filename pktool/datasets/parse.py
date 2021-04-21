@@ -140,7 +140,7 @@ def simpletxt_parse(label_file, space=' ', boxType='bbox'):
             thetaobb: [cx, cy, w, h, theta]
     
     Returns:
-        dict, {'bbox': [...], 'label': class_name} -- objects' location and class
+        dict, {boxType: [...], 'label': class_name} -- objects' location and class
     """
     BOX_TYPE = {'bbox':4, 'points':8, 'thetaobb':5}
     location = BOX_TYPE[boxType]

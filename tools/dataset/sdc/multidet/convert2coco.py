@@ -34,6 +34,7 @@ class SDC2COCO(Convert2COCO):
                 continue
 
             coco_annotation['segmentation']=[object_struct['segmentation']]
+            coco_annotation['pointobb']=object_struct['pointobb']
             coco_annotation['bbox'] = bbox
             coco_annotation['category_id'] = label
             coco_annotation['area'] = np.float(area)

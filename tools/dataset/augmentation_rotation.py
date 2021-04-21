@@ -142,15 +142,26 @@ def rotation_main(image_path, label_path, label_list, rotation_angle=45):
             cv2.imwrite(image_save_file, img_rotation)
             simpletxt_dump(objects, label_save_file,encode='points')
 
+def mixup(img1,img2,lambd):
+    ##img1.shape = img2.shape
+
+    height, width=img1.shape[:2]
+    mix_img = np.zeros(shape=(height, width, 3), dtype='float32')
+    mix_img[:image.shape[0], :image.shape[1], :] = image.astype('float32') * lambd
+    mix_img[:image2.shape[0], :image2.shape[1], :] += image2.astype('float32') * (1. - lambd)
+    mix_img = mix_img.astype(np.uint8)
+
+    return mix_img
 
 if __name__== '__main__':
+
     image_path='/home/pd/data/images/'
     label_path='/home/pd/data/labels/'
 
-    label_list=os.listdir(label_path)
+    # label_list=os.listdir(label_path)
 
-    rotation_main(image_path, label_path, label_list, rotation_angle=5)
-    #rotation_main(image_path, label_path, label_list, rotation_angle=60)
-    #rotation_main(image_path, label_path, label_list, rotation_angle=90)
-    #rotation_main(image_path, label_path, label_list, rotation_angle=120)
-    #rotation_main(image_path, label_path, label_list, rotation_angle=150)
+    # rotation_main(image_path, label_path, label_list, rotation_angle=5)
+    # #rotation_main(image_path, label_path, label_list, rotation_angle=60)
+    # #rotation_main(image_path, label_path, label_list, rotation_angle=90)
+    # #rotation_main(image_path, label_path, label_list, rotation_angle=120)
+    # #rotation_main(image_path, label_path, label_list, rotation_angle=150)

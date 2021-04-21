@@ -69,11 +69,11 @@ class Convert2COCO():
             if annotations_coco != [] or self.groundtruth == False:
                 img = cv2.imread(imgpath)
                 height, width, _ = img.shape
-                images.append({"date_captured": "2019",
+                images.append({"date_captured": "2021",
                                 "file_name": name + self.image_format,
                                 "id": imId + 1,
                                 "license": 1,
-                                "url": "http://jwwangchn.cn",
+                                "url": "http://paulikarl.cn",
                                 "height": height,
                                 "width": width})
 
